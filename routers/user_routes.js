@@ -1,7 +1,7 @@
 const router = require('./router');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const auth = require("../middleware/auth");
+const adminAuth = require("../middleware/admin_auth");
 
 // importing user context
 const User = require("../model/user");
@@ -101,14 +101,10 @@ router.post("/login", async (req, res) => {
     // Our login logic ends here
   });
 
-  router.post("/users", auth, (req, res) => {
-    if(req.user.role!=="admin"){
-        res.status(401).send("Unauthorized Access");
-    }else{
-      const users = User.find({}, function(err, users) {
-            res.status(200).send(users);
-        });
-    }
+  router.post("/users", adminAuth, (req, res) => {
+    const users = User.find({}, function(err, users) {
+        res.status(200).send(users);
+    });
   });
   
 
