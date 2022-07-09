@@ -9,7 +9,7 @@ const User = require("../model/user");
 // Register
 router.post("/register", async (req, res) => {
 
-    // Our register logic starts here
+    //  register logic starts here
     try {
       // Get user input
       const { first_name, last_name, email, password, role } = req.body;
@@ -20,7 +20,7 @@ router.post("/register", async (req, res) => {
       }
   
       // check if user already exist
-      // Validate if user exist in our database
+      // Validate if user exist in database
       const oldUser = await User.findOne({ email });
   
       if (oldUser) {
@@ -30,7 +30,7 @@ router.post("/register", async (req, res) => {
       //Encrypt user password
       encryptedPassword = await bcrypt.hash(password, 10);
   
-      // Create user in our database
+      // Create user in database
       const user = await User.create({
         first_name,
         last_name,
@@ -55,7 +55,7 @@ router.post("/register", async (req, res) => {
     } catch (err) {
       console.log(err);
     }
-    // Our register logic ends here
+    //  register logic ends here
   });
   
  
@@ -63,7 +63,7 @@ router.post("/register", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
 
-    // Our login logic starts here
+    //  login logic starts here
     try {
       // Get user input
       const { email, password } = req.body;
@@ -72,7 +72,7 @@ router.post("/login", async (req, res) => {
       if (!(email && password)) {
         res.status(400).send("All input is required");
       }
-      // Validate if user exist in our database
+      // Validate if user exist in  database
       const user = await User.findOne({ email });
   
       if (user && (await bcrypt.compare(password, user.password))) {
@@ -98,13 +98,18 @@ router.post("/login", async (req, res) => {
     } catch (err) {
       console.log(err);
     }
-    // Our login logic ends here
+    //  login logic ends here
   });
 
+  // Users
   router.post("/users", adminAuth, (req, res) => {
-    const users = User.find({}, function(err, users) {
-        res.status(200).send(users);
-    });
+    try{
+        const users = User.find({}, function(err, users) {
+            res.status(200).send(users);
+        });
+    } catch(err){
+        console.log(err);
+    }
   });
   
 
